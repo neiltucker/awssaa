@@ -1,0 +1,44 @@
+# CloudFormation Template File
+Resources:
+  Ec2Instance:
+    Type: 'AWS::EC2::Instance'
+    DeletionPolicy: Delete
+    Properties:
+      ImageId: 'ami-5b41123e'
+      InstanceType: t2.micro
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      KeyName: keypair2
+      Tags: [{"Key" : "Name", "Value" : "linux2020"}]
+  InstanceSecurityGroup:	# Security Group will be created before instance
+    Type: 'AWS::EC2::SecurityGroup'
+    DeletionPolicy: Delete
+    Properties:
+      GroupDescription: Enable SSH access via port 22
+      SecurityGroupIngress:
+        - IpProtocol: TCP
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+  S3Bucket1:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: nrtbucket2020a
+      AccessControl: PublicRead
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+  S3Bucket2:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: nrtbucket2020b
+      AccessControl: PublicRead
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
